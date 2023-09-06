@@ -1,0 +1,114 @@
+﻿<ui:UiPage x:Class="TaskManager.Pages.SerialManager"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TaskManager.Pages"
+           xmlns:usrctrl="clr-namespace:TaskManager.CustomControl"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+       Scrollable="True"
+      Title="SerialManager">
+
+    <VirtualizingStackPanel
+        x:Name="RootPanel"
+        Margin="18,0,18,18"
+        IsVirtualizing="True"
+        VirtualizationMode="Recycling">
+
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <usrctrl:LiveChart 
+    
+            x:Name="txUart1"    
+            Height="128" Margin="0 0 0 24"/>
+
+            <usrctrl:LiveChart Grid.Column="1"
+    
+            x:Name="rxUart1"    
+            Height="128" Margin="0 0 0 24"/>
+
+        </Grid>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <usrctrl:LiveChart 
+    
+            x:Name="txUart2"    
+            Height="128" Margin="0 0 0 24"/>
+
+            <usrctrl:LiveChart Grid.Column="1"
+    
+            x:Name="rxUart2"    
+            Height="128" Margin="0 0 0 24"/>
+
+        </Grid>
+
+
+        <StackPanel Orientation="Horizontal">
+            <Label Width="128">Port Name</Label>
+            <Label Width="96">Baudrate (bps)</Label>
+            <Label Width="80">Send (bps)</Label>
+            <Label Width="80">Receive (bps)</Label>
+            <Label Width="128">Status</Label>
+
+        </StackPanel>
+
+        <DockPanel HorizontalAlignment="Left">
+
+
+            <ListView 
+    
+    ItemsSource="{Binding Serials}"
+    >
+
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal"
+                        
+                        Background="{Binding TaskColor}">
+
+                            <StackPanel.Resources>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </StackPanel.Resources>
+
+                            <TextBlock
+                    Margin="8 4 0 4"
+                Width="128"
+                Text="{Binding Name}"
+                />
+
+                            <TextBlock
+                Width="64"
+                Text="{Binding Baudrate}"
+                />
+                            <TextBlock
+                Width="80"
+                Text="{Binding Send}"
+                />
+                            <TextBlock
+                Width="80"
+                Text="{Binding Receive}"
+                />
+                            <TextBlock
+                Width="128"
+                Text="{Binding Status}"
+                />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </DockPanel>
+
+    </VirtualizingStackPanel>
+</ui:UiPage>

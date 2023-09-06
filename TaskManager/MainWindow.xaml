@@ -1,0 +1,241 @@
+﻿<ui:UiWindow x:Class="TaskManager.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TaskManager"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:pages="clr-namespace:TaskManager.Pages"
+        mc:Ignorable="d"
+        Background="{DynamicResource ApplicationBackgroundBrush}"
+             Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+            ExtendsContentIntoTitleBar="True"
+    WindowBackdropType="Mica"
+    WindowCornerPreference="Round"
+             Closed="UiWindow_Closed"
+        
+        Title="MainWindow" Height="800" Width="1600">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid
+            x:Name="RootMainGrid"
+            Grid.Row="1"
+            Margin="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!--  This is the main navigation of the application.  -->
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Margin="24 24 24 48"
+                            >
+                    <StackPanel.Resources>
+                        <Style TargetType="Label" BasedOn="{StaticResource {x:Type Label}}">
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}"/>
+                        </Style>
+
+                        <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+                            <Setter Property="Margin" Value="16,4,4,4"/>
+                        </Style>
+                    </StackPanel.Resources>
+
+                    <Label
+                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                        FontSize="16"
+                        FontWeight="DemiBold"
+                        >
+                        Serial Connect
+                    </Label>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                    
+                        <Label Grid.Row="0" Grid.Column="0">COM</Label>
+                        <ComboBox Grid.Row="0" Grid.Column="1"
+                                  ItemsSource="{Binding SerialPorts}"
+                                  SelectedValue="{Binding ComPort, Mode=OneWayToSource}"
+                                  ></ComboBox>
+                        <Label Grid.Row="1" Grid.Column="0">Baudrate</Label>
+                        <ComboBox Grid.Row="1" Grid.Column="1"
+                                  SelectedIndex="1"
+                                  ItemsSource="{Binding ListBaudrate}"
+                                  SelectedValue="{Binding Baudrate ,Mode=OneWayToSource}">
+
+                        </ComboBox>
+                    </Grid>
+
+
+
+
+
+                    <ToggleButton 
+                        x:Name="btnConnect"
+                        Click="ButtonConnect_Click"
+                        Margin="16"
+                        HorizontalAlignment="Center"
+                        IsChecked="True"
+                        IsEnabled="False"
+                        Width="100" >Connect</ToggleButton>
+
+                </StackPanel>
+                    <ui:NavigationSeparator Grid.Row="1" />
+                
+            <ui:NavigationFluent
+                x:Name="RootNavigation"
+                Grid.Row="2"
+                Grid.Column="0"
+                Margin="6,0,6,0"
+                Frame="{Binding ElementName=RootFrame}"
+                Navigated="RootNavigation_OnNavigated"
+                Precache="False"
+                SelectedPageIndex="0"
+                TransitionDuration="200"
+                TransitionType="FadeInWithSlide">
+
+
+                <ui:NavigationFluent.Items>
+                    <ui:NavigationItem
+                        Cache="True"
+                        Content="Home"
+                        Icon="Home24"
+                        PageTag="dashboard"
+                        PageType="{x:Type pages:Home}"
+               />
+                    <ui:NavigationSeparator />
+
+                    <ui:NavigationItem
+                        Content="Hardware Moniter"
+                        Icon="ShareScreenPerson24"
+                        PageType="{x:Type pages:HardwareMonitor}"
+                      />
+
+                    <ui:NavigationItem
+                        Content="Task Manager"
+                        Icon="TaskListLtr24"
+                        PageType="{x:Type pages:TaskManagerPage}"
+                      />
+                    <!--
+                    <ui:NavigationHeader Icon="Fluent24" Text="Header" />
+                    -->
+                    <ui:NavigationItem
+                        Cache="True"
+                        Content="Serial Manager"
+                        Icon="NetworkCheck24"
+                        PageType="{x:Type pages:SerialManager}"
+                        />
+                    <ui:NavigationItem
+                        Content="Configure"
+                        Icon="Settings24"
+                         PageType="{x:Type pages:Configure}"
+                       />
+
+                    <ui:NavigationItem
+                        Content="Active"
+                        Icon="ApprovalsApp24"
+                       />
+                    
+                        <ui:NavigationItem
+                        Content="Help"
+                        Icon="ChatHelp24"
+                    />
+
+                </ui:NavigationFluent.Items>
+
+                <ui:NavigationFluent.Footer>
+                    <!--  A navigation element that does not point to the page can be used as a button.  -->
+                    <ui:NavigationItem
+                        Click="NavigationButtonTheme_OnClick"
+                        Content="Theme"
+                        Icon="DarkTheme24" />
+
+                    
+                </ui:NavigationFluent.Footer>
+            </ui:NavigationFluent>
+            </Grid>
+            <!--  We display our pages inside this element.  -->
+            <Border
+                Grid.Column="1"
+                Background="{DynamicResource ControlFillColorDefaultBrush}"
+                CornerRadius="8,0,0,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Frame x:Name="RootFrame" Grid.Row="1" />
+                    <ui:Breadcrumb
+                        Grid.Row="0"
+                        Margin="18"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        FontSize="24"
+                        Navigation="{Binding ElementName=RootNavigation}" />
+
+                    <ui:Snackbar
+                        x:Name="RootSnackbar"
+                        Title="Hello World!"
+                        Grid.Row="1"
+                        MaxWidth="600"
+                        Appearance="Secondary"
+                        CloseButtonEnabled="True"
+                        Icon="PuzzlePiece24"
+                        Message="Remember that the Heat Death of Universe is coming someday, no time to explain - let's go!"
+                        Timeout="5000" />
+                </Grid>
+            </Border>
+        </Grid>
+
+
+        <!--
+        <ui:NavigationView Grid.Row="1" Type="Compact" />
+        -->
+
+        <!--  Dialogue is above all controls except the navigation buttons. So it covers all the content, but allows you to close or move the application.  -->
+        <ui:Dialog
+            x:Name="RootDialog"
+            Title="WPF UI"
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            ButtonLeftName="Click me if you can!" />
+
+        <ui:TitleBar
+            
+            Title="Project"
+            x:Name="RootTitleBar"
+            Grid.Row="0"
+            ForceShutdown="False"
+            MinimizeToTray="False"
+            ShowHelp="False"
+            UseSnapLayout="True">
+            <ui:TitleBar.Header>
+                <StackPanel
+                    Margin="0,0,12,0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+                </StackPanel>
+            </ui:TitleBar.Header>
+        </ui:TitleBar>
+    </Grid>
+</ui:UiWindow>
